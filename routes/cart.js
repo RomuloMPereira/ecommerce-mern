@@ -36,4 +36,20 @@ router.put("/:id", verifyToken, async (req, res) => {
     }
 });
 
+//DELETE
+router.delete("/:id", verifyToken, async (req, res) => {
+    try {
+        const cart = await Cart.findOne({ id: req.params.id });
+        if (req.user.id === cart.userId || req.user.isAdmin) {
+            await Cart.findByIdAndDelete(req.params.id);
+            res.status(200).json("Cart has been deleted...");
+        } else {
+            res.status(401).json("You are not authenticated!");
+        }
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
+
+
 module.exports = router;
