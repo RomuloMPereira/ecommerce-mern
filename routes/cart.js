@@ -1,5 +1,5 @@
 const Cart = require("../models/Cart");
-const { verifyToken, verifyTokenAndAuthorization2 } = require("./verifyToken");
+const { verifyToken, verifyTokenAndAdmin } = require("./verifyToken");
 
 const router = require("express").Router();
 
@@ -60,6 +60,16 @@ router.get("/find/:userId", verifyToken, async (req, res) => {
         } else {
             res.status(403).json("You are not alowed to do that!");
         }
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
+
+//GET ALL
+router.get("/", verifyTokenAndAdmin, async (req, res) => {
+    try {
+        const carts = await Cart.find();
+        res.status(200).json(carts);
     } catch (err) {
         res.status(500).json(err);
     }
