@@ -29,7 +29,7 @@ router.put("/:id", verifyToken, async (req, res) => {
             );
             res.status(200).json(updatedCart);
         } else {
-            res.status(401).json("You are not authenticated!");
+            res.status(403).json("You are not alowed to do that!");
         }
     } catch (err) {
         res.status(500).json(err);
@@ -44,7 +44,21 @@ router.delete("/:id", verifyToken, async (req, res) => {
             await Cart.findByIdAndDelete(req.params.id);
             res.status(200).json("Cart has been deleted...");
         } else {
-            res.status(401).json("You are not authenticated!");
+            res.status(403).json("You are not alowed to do that!");
+        }
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
+
+//GET USER CART
+router.get("/find/:userId", verifyToken, async (req, res) => {
+    try {
+        if (req.user.id = req.params.userId || req.user.isAdmin) {
+            const cart = await Cart.findOne({ userId: req.params.userId });
+            res.status(200).json(cart);
+        } else {
+            res.status(403).json("You are not alowed to do that!");
         }
     } catch (err) {
         res.status(500).json(err);
