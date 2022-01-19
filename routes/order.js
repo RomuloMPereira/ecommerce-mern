@@ -45,4 +45,18 @@ router.delete("/:id", verifyTokenAndAdmin, async (req, res) => {
     }
 });
 
+//GET USER ORDERS
+router.get("/find/:userId", verifyToken, async (req, res) => {
+    try {
+        if (req.user.id = req.params.userId || req.user.isAdmin) {
+            const orders = await Order.find({ userId: req.params.userId });
+            res.status(200).json(orders);
+        } else {
+            res.status(403).json("You are not alowed to do that!");
+        }
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
+
 module.exports = router;
